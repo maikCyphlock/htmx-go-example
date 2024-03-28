@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <body>
+      <main class="container">
+   
+      <div class="grid">
+          <ul id="film-list"> 
+            {{ range .Films }}
+              {{ block "film-list-element" .}}
+                <li>{{ .Title }} - {{ .Director }}</li>
+              {{ end }}
+            {{ end }}
+          </ul>
+         
+            <div>
+              <h1>Add Film</h1>
+              <form hx-post="/add-film/" hx-indicator="#spinner" hx-target="#film-list" hx-swap="beforeend">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title">
+                <label for="director">Director</label>
+                <input type="text" name="director" id="director">
+                <div>
+                  <button  type="submit">Submit</button>
+                  <span aria-busy="true" class="htmx-indicator" id="spinner"></span>
+                </div>
+              </form>
+            </div>
+      </div>
+
+      </main>
+
+  </body>
+</html>
