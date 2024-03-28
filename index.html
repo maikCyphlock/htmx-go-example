@@ -9,6 +9,15 @@
     />
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
     <title>Document</title>
+    <style>
+      .cover {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: cover;
+        object-position: center;
+        aspect-ratio: 1 / 2;
+      }
+    </style>
   </head>
 
   <body>
@@ -19,18 +28,25 @@
           <ul id="film-list"> 
             {{ range .Films }}
               {{ block "film-list-element" .}}
-                <li>{{ .Title }} - {{ .Director }}</li>
+                <li>
+                  <h3>{{ .Title }}</h3>
+                  <h6>{{ .Director }}</h6>
+                  <img src="data:image/png;base64, {{ .Image }}" alt="cover of {{ .Title }}" class="cover" >
+                </li>
+                
               {{ end }}
             {{ end }}
           </ul>
          
             <div>
               <h1>Add Film</h1>
-              <form hx-post="/add-film/" hx-indicator="#spinner" hx-target="#film-list" hx-swap="beforeend">
+              <form hx-post="/add-film/" hx-encoding="multipart/form-data" hx-indicator="#spinner" hx-target="#film-list" hx-swap="beforeend">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title">
                 <label for="director">Director</label>
                 <input type="text" name="director" id="director">
+                <label for="img-film">Image</label>
+                <input type="file" name="img-film" id="img-film">
                 <div>
                   <button  type="submit">Submit</button>
                   <span aria-busy="true" class="htmx-indicator" id="spinner"></span>

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/base64"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -10,6 +12,7 @@ import (
 type Film struct {
 	Title    string
 	Director string
+	Image    string
 }
 
 func main() {
@@ -38,9 +41,24 @@ func main() {
 
 		title := r.PostFormValue("title")
 		director := r.PostFormValue("director")
+		// Parse the file from the form-data
+		file, _, err := r.FormFile("img-film")
+		if err != nil {
+			log.Println(err)
+		}
+		defer file.Close()
+
+		// Read the file into a byte slice
+		imageData, err := io.ReadAll(file)
+		if err != nil {
+			log.Println(err)
+		}
+
+		imageDataBase64 := base64.StdEncoding.EncodeToString(imageData)
+
 		tmpl := template.Must(template.ParseFiles("index.html"))
 
-		tmpl.ExecuteTemplate(w, "film-list-element", Film{Title: title, Director: director})
+		tmpl.ExecuteTemplate(w, "film-list-element", Film{Title: title, Director: director, Image: imageDataBase64})
 
 	})
 
