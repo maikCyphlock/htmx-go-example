@@ -7,6 +7,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
     <title>Document</title>
     <style>
@@ -25,18 +29,20 @@
       <main class="container">
    
       <div class="grid">
-          <ul id="film-list"> 
+          <section id="film-list"> 
             {{ range .Films }}
               {{ block "film-list-element" .}}
-                <li>
+                <div class="animate__animated animate__fadeInLeft">
                   <h3>{{ .Title }}</h3>
                   <h6>{{ .Director }}</h6>
-                  <img src="data:image/png;base64, {{ .Image }}" alt="cover of {{ .Title }}" class="cover" >
-                </li>
+                    {{ if .Image }}
+                      <img src="data:image/png;base64, {{ .Image }}" alt="cover of {{ .Title }}" class="cover  " >
+                    {{ end }}
+                </div>
                 
               {{ end }}
             {{ end }}
-          </ul>
+          </section>
          
             <div>
               <h1>Add Film</h1>
